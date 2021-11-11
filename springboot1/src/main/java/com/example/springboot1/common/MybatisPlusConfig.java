@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan("com.baomidou.cloud.service.*.mapper*")
+@MapperScan("com.example.springboot1.mapper")
 public class MybatisPlusConfig {
     /**
      * 分页插件  mybatis-plus  官网引入
