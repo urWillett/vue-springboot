@@ -1,0 +1,7 @@
+*{
+    margin: 0; /*边缘*/
+    padding: 0; /*填充*/
+    box-sizing: border-box;  /*盒装模型*/
+}
+
+/*    *所有元素都生效          */
