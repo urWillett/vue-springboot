@@ -7,5 +7,7 @@ spring:
  datasource:
    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
    url: jdbc:sqlserver://localhost:1433;DatabaseName=springboot-vue
-   username: dxm
-   password: 123
+   username: sa
+   password: 123456
+server:
+  port: 9090

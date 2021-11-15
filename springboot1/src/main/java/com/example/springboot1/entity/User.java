@@ -11,8 +11,9 @@ public class User {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String username;
+    private String nick_name;
     private String password;
     private Integer age;
-    private String sex;                //使用了lombokJava简化工具，不用getset
+    private String sex;                //使用了lombokJava简化工具，不用get/set
     private String address;
 }

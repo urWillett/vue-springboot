@@ -94,6 +94,7 @@
 
 import {ref} from "vue";
 import {ElMessageBox} from "element-plus";
+import request from "../../utils/request";
 
 export default {
   name: 'Home',
@@ -124,7 +125,11 @@ methods: {
 
     }, //打开新增弹窗
   save(){
-
+    request.post("/api/user",this.form).then(res =>{
+      console.log(res)  //打印返回结果
+    })
+    //.then  es6语法   前一步执行完成后，将返回结果放在.then里面，通过=> 将结果取到
+    //post 方法只需要2个参数  url和请求参数
   },//将新增数据（form对象）保存到后台，传到后台之前，需要有一个进行数据交互的API(ajax)
   handleClick() {
   },

@@ -10,31 +10,31 @@
         <el-sub-menu index="1">
           <template #title>
             <el-icon><location /></el-icon>
-            <span>Navigator One</span>
+            <span>导航 One</span>
           </template>
-          <el-menu-item-group title="Group One">
-            <el-menu-item index="1-1">item one</el-menu-item>
-            <el-menu-item index="1-2">item one</el-menu-item>
+          <el-menu-item-group title="组 One">
+            <el-menu-item index="1-1">项目 one</el-menu-item>
+            <el-menu-item index="1-2">项目 two</el-menu-item>
           </el-menu-item-group>
-          <el-menu-item-group title="Group Two">
-            <el-menu-item index="1-3">item three</el-menu-item>
+          <el-menu-item-group title="组 Two">
+            <el-menu-item index="1-3">项目 three</el-menu-item>
           </el-menu-item-group>
           <el-sub-menu index="1-4">
-            <template #title>item four</template>
-            <el-menu-item index="1-4-1">item one</el-menu-item>
+            <template #title>项目 four</template>
+            <el-menu-item index="1-4-1">子项目 one</el-menu-item>
           </el-sub-menu>
         </el-sub-menu>
         <el-menu-item index="2">
           <el-icon><icon-menu /></el-icon>
-          <span>Navigator Two</span>
+          <span>导航 Two</span>
         </el-menu-item>
         <el-menu-item index="3" disabled>
           <el-icon><document /></el-icon>
-          <span>Navigator Three</span>
+          <span>导航 Three</span>
         </el-menu-item>
         <el-menu-item index="4">
           <el-icon><setting /></el-icon>
-          <span>Navigator Four</span>
+          <span>导航 Four</span>
         </el-menu-item>
       </el-menu>
     </el-col>
