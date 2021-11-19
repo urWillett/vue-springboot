@@ -1,11 +1,27 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import Layout from "@/layout/Layout";
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Layout',
+    component: Layout,
+    redirect:"/home",     //重定向路由
+    children:[
+      {
+        path:'home',
+        name:'Home',
+        component: () => import("@/views/Home")
+      }
+    ]
+  },
+
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import("@/views/Login")
+  //  导入组件的另一种模式
   },
 ]
 

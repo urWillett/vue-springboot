@@ -10,8 +10,8 @@
     </div>
 <!--    搜索区域-->
     <div style="margin: 10px 0">
-      <el-input v-model="search" placeholder="输入关键字" style="width: 20%"/>
-      <el-button type="primary" style="margin-left: 5px">查询</el-button>
+      <el-input v-model="search" placeholder="输入关键字" style="width: 20%" clearable/>
+      <el-button type="primary" style="margin-left: 5px" @click="load">查询</el-button>
     </div>
 <!--    数据显示-->
     <el-table :data="tableData" border style="width: 100%" stripe>
@@ -25,14 +25,14 @@
 <!--      编辑和删除-->
       <el-table-column fixed="right" label="操作" >
         <template #default="scope">
-       <el-popconfirm title="确认删除吗？">  <!--  气泡确认框  -->
+       <el-popconfirm title="确认删除吗？" @click="handleDelete(scope.row.id)">  <!--  气泡确认框  -->
             <template #reference>
-          <el-button type="danger" size="mini" @click="handleClick"
+          <el-button type="danger" size="mini"
           >删除</el-button
           >
             </template>
           </el-popconfirm>
-          <el-button  size="mini">编辑</el-button>
+          <el-button  size="mini " @click="handleEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,7 +41,7 @@
       <el-pagination
           v-model:currentPage="currentPage"
           :page-sizes="[5,10,20]"
-          :page-size="10"
+          :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
           @size-change="handleSizeChange"
@@ -93,8 +93,8 @@
 
 
 import {ref} from "vue";
-import {ElMessageBox} from "element-plus";
-import request from "../../utils/request";
+import {ElMessage, ElMessageBox} from "element-plus";
+import request from "../utils/request";
 
 export default {
   name: 'Home',
@@ -107,14 +107,30 @@ export default {
       handleClose:1,
       dialogVisible:false,
       currentPage:1,
-      total:10,
+      pageSize:10,
+      total:0,
       search:ref('' ),
       tableData:[
-
       ],
     }
   },
-methods: {
+  created() {
+    this.load()
+  }, //页面预加载时调用
+  methods: {
+    load(){
+      request.get("/api/people",{
+        params:{
+          pageNum:this.currentPage,
+          pageSize:this.pageSize,
+          search:this.search
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tableData = res.data.records
+        this.total = res.data.total
+      })
+    },
     add(){
     this.dialogVisible=true
     this.form={}  //清空表单，之前的新增记录
@@ -125,18 +141,75 @@ methods: {
 
     }, //打开新增弹窗
   save(){
-    request.post("/api/user",this.form).then(res =>{
-      console.log(res)  //打印返回结果
-    })
+      if (this.form.id){ //更新
+        request.put("/api/people",this.form).then(res => {
+          console.log(res)
+          if (res.code === '0') {
+            ElMessage({
+              type: "success",
+              message: "更新成功"
+            })
+          } else {
+            ElMessage({
+              type: "error",
+              message: res.msg
+            })
+          }
+      this.load()  //刷新表格的数据
+          this.dialogVisible = false  //关闭弹窗
+        })
+        } else {   //新增
+        request.post("/api/people", this.form).then(res => {
+          console.log(res)  //打印返回结果
+          if (res.code === '0') {
+            ElMessage({
+              type: "success",
+              message: "新增成功"
+            })
+          } else {
+            ElMessage({
+              type: "error",
+              message: res.msg
+            })
+          }
+          this.load()  //刷新表格的数据
+          this.dialogVisible = false  //关闭弹窗
+        })
+      }
     //.then  es6语法   前一步执行完成后，将返回结果放在.then里面，通过=> 将结果取到
     //post 方法只需要2个参数  url和请求参数
   },//将新增数据（form对象）保存到后台，传到后台之前，需要有一个进行数据交互的API(ajax)
-  handleClick() {
+  handleDelete(id) {
+    console.log(id)
+    request.delete("/api/user/"+id).then(res => {
+    //映射后台接口  UserController
+      if (res.code === '0') {
+        ElMessage({
+          type: "success",
+          message: "删除成功"
+        })
+      } else {
+        ElMessage({
+          type: "error",
+          message: res.msg
+        })
+      }
+      this.load()  //删除之后重新加载表格
+    })
+  },
+    handleEdit(row) {
+      this.form = JSON.parse(JSON.stringify(row))
+      this.dialogVisible = true
   },
 
-  handleSizeChange() {
+
+  handleSizeChange(pageSize) {// 改变当前每页的个数触发
+      this.pageSize = pageSize
+      this.load()
   },
-  handleCurrentChange(){
+  handleCurrentChange(pageNum){ //改变当前页码触发
+      this.currentPage=pageNum
+      this.load()
   }
 }
 }

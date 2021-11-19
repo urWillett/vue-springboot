@@ -18,7 +18,7 @@ public class test {
             //2.连接
             dbConn = DriverManager.getConnection(dbURL, "sa", "123456");
             System.out.println("连接数据库成功！");
-            String sql="select * from [user] ";
+            String sql="select * from people ";
             PreparedStatement statement=null;
             statement=dbConn.prepareStatement(sql);
             ResultSet res=null;

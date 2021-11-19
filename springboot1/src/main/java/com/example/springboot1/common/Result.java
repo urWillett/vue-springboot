@@ -1,9 +1,9 @@
 package com.example.springboot1.common;
 //返回前台数据的包装类
 public class Result <T>{
-    private String code;
-    private String msg;
-    private T data;
+    private String code;//后台告诉前台 这次返回的数据是成功还是失败  ，成功为0
+    private String msg;//后台把错误信息返回给前台，用户名或者密码错误
+    private T data;//T 泛型 表示任何一种数据类型都可以被result所包含
 
     public String getCode() {
         return code;
@@ -42,7 +42,7 @@ public class Result <T>{
     }
 
     public static <T> Result<T>  success(T data){
-        Result<T> result =new Result<>();
+        Result<T> result =new Result<>(data);
         result.setCode("0");
         result.setMsg("成功");
         return result;
