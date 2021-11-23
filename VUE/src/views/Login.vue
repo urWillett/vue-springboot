@@ -4,13 +4,13 @@
       <div style="color: #cccccc;font-size: 30px;text-align: center;padding: 30px 0">欢迎登陆</div>
       <el-form ref="form" :model="form" size="normal" >
         <el-form-item>
-          <el-input  v-model="form.username">
-            <el-icon><avatar /></el-icon>
+          <el-input  class="el-icon-user-solid" placeholder="用户名" v-model="form.username">
+<!--            <el-icon><avatar style="width: 1em; height: 1em; margin-right: 8px;"/> </el-icon>-->
           </el-input>
         </el-form-item>
         <el-form-item >
-          <el-input  v-model="form.password" show-password>
-            <el-icon><lock /></el-icon>
+          <el-input  class="el-icon-lock" placeholder="密码" v-model="form.password" show-password>
+<!--            <el-icon><lock style="width: 1em; height: 1em; margin-right: 8px;"/> </el-icon>-->
           </el-input>
         </el-form-item>
         <el-form-item>
@@ -18,11 +18,13 @@
         </el-form-item>
         </el-form>
     </div>
+
   </div>
 </template>
 
 <script>
-import {avatar,lock} from '@element-plus/icons'
+
+
 import Avatar from '@/components/Avatar'
 
 import request from "../utils/request";
@@ -33,8 +35,7 @@ import {ElMessage} from "element-plus";
 export default {
   name: "Login",
   components:{
-  Avatar,
-    Lock
+
   },
   data(){
     return{
@@ -45,13 +46,13 @@ export default {
     login(){
       request.post("/api/people/login",this.form).then(res => {
         if (res.code === '0') {
-          ElMessage({
+          ElMessage.success({
             type: "success",
             message: "登录成功"
           })
           this.$router.push("/")  //登陆成功之后进行页面的跳转，跳转到主页面
         } else {
-          ElMessage({
+          ElMessage.error({
             type: "error",
             message: res.msg
           })

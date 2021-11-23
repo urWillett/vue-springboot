@@ -10,13 +10,13 @@
     </div>
 <!--    搜索区域-->
     <div style="margin: 10px 0">
-      <el-input v-model="search" placeholder="输入关键字" style="width: 20%" clearable/>
+      <el-input v-model="search" placeholder="输入昵称关键字" style="width: 20%" clearable/>
       <el-button type="primary" style="margin-left: 5px" @click="load">查询</el-button>
     </div>
 <!--    数据显示-->
     <el-table :data="tableData" border style="width: 100%" stripe>
 
-      <el-table-column prop="ID" label="ID" sortable />
+      <el-table-column prop="id" label="ID" sortable />
       <el-table-column prop="username" label="用户名"  />
      <el-table-column prop="nickName" label="昵称" />  <!--数据库中有_，查询出来显示驼峰-->
       <el-table-column prop="age" label="年龄" />
@@ -27,9 +27,7 @@
         <template #default="scope">
        <el-popconfirm title="确认删除吗？" @click="handleDelete(scope.row.id)">  <!--  气泡确认框  -->
             <template #reference>
-          <el-button type="danger" size="mini"
-          >删除</el-button
-          >
+          <el-button type="danger" size="mini">删除</el-button>
             </template>
           </el-popconfirm>
           <el-button  size="mini " @click="handleEdit(scope.row)">编辑</el-button>
@@ -58,6 +56,7 @@
         :before-close="handleClose"
     >
       <el-form :model="form" label-width="120px">
+
         <el-form-item label="用户名">
           <el-input v-model="form.username" style="width: 80%"></el-input>
         </el-form-item>
@@ -68,23 +67,25 @@
           <el-input v-model="form.age" style="width: 80%"></el-input>
         </el-form-item>
         <el-form-item label="性别">
-          <el-radio v-model="form.sex" label="1"> 男</el-radio>
-          <el-radio v-model="form.sex" label="2"> 女</el-radio>
+          <el-radio v-model="form.sex" label="男"> 男</el-radio>
+          <el-radio v-model="form.sex" label="女"> 女</el-radio>
           <el-radio v-model="form.sex" label="未知"> 未知</el-radio>
         </el-form-item>
         <el-form-item label="地址">
-          <el-input type="textarea" v-model="form.adress" style="width: 80%"></el-input>
+          <el-input type="textarea" v-model="form.address" style="width: 80%"></el-input>
         </el-form-item>
           </el-form>
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="save"
-        >确认</el-button
-        >
+        <el-button type="primary" @click="save">确认</el-button>
       </span>
       </template>
     </el-dialog>
+    <el-button :plain="true" @click="open1">成功</el-button>
+
+
+
   </div>
 </template>
 
@@ -92,17 +93,24 @@
 // @ is an alias to /src
 
 
-import {ref} from "vue";
+import {ref,defineComponent} from "vue";
 import {ElMessage, ElMessageBox} from "element-plus";
 import request from "../utils/request";
 
-export default {
+export default  {
   name: 'Home',
   components: {
 
   },
   data(){
     return {
+      open1() {
+        ElMessage.success({
+          message: '恭喜你，这是一条成功消息',
+          type: 'success'
+        });
+      },
+
       form:{},
       handleClose:1,
       dialogVisible:false,
@@ -145,13 +153,14 @@ export default {
         request.put("/api/people",this.form).then(res => {
           console.log(res)
           if (res.code === '0') {
-            ElMessage({
-              type: "success",
-              message: "更新成功"
+            ElMessage.success({
+
+              message: '更新成功',
+              type: 'success',
             })
           } else {
-            ElMessage({
-              type: "error",
+            ElMessage.error({
+              type: 'error',
               message: res.msg
             })
           }
@@ -162,12 +171,15 @@ export default {
         request.post("/api/people", this.form).then(res => {
           console.log(res)  //打印返回结果
           if (res.code === '0') {
-            ElMessage({
+
+            ElMessage.success({
+              message: "新增成功",
               type: "success",
-              message: "新增成功"
+
             })
+
           } else {
-            ElMessage({
+            ElMessage.error({
               type: "error",
               message: res.msg
             })
@@ -184,12 +196,12 @@ export default {
     request.delete("/api/user/"+id).then(res => {
     //映射后台接口  UserController
       if (res.code === '0') {
-        ElMessage({
+        ElMessage.success({
           type: "success",
           message: "删除成功"
         })
       } else {
-        ElMessage({
+        ElMessage.error({
           type: "error",
           message: res.msg
         })
