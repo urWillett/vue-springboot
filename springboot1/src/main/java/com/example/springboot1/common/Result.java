@@ -36,7 +36,7 @@ public class Result <T>{
 
     public static Result success(){
         Result result =new Result<>();
-        result.setCode("o");
+        result.setCode("0");
         result.setMsg("成功");
         return result;
     }

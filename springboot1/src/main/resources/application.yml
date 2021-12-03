@@ -5,11 +5,14 @@ server:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/***?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8
 spring:
- datasource:
+  datasource:
    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
    url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=springboot-vue
    username: sa
    password: 123456
+#   日期格式化
+#  jackson:
+#    date-format: yyyy-MM-dd
 
 mybatis-plus:
   configuration:
@@ -18,5 +21,6 @@ mybatis-plus:
 logging:
   level:
     com.example.springboot1.mapper: debug
+
 
 

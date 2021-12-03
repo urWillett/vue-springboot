@@ -1,5 +1,6 @@
 //封装axios
 import axios from 'axios'
+import router from "@/router";
 
 const request = axios.create({
     timeout: 5000
@@ -12,6 +13,14 @@ request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
 
     // config.headers['token'] = user.token;  // 设置请求头
+
+    //取出sessionStorage里面缓存的用户信息
+    let peopleJson = sessionStorage.getItem("people")
+    //判断  如果sessionStorage为空，则返回登录界面  强制登录
+    if (!peopleJson){
+        router.push("login")
+    }
+
     return config
 }, error => {
     return Promise.reject(error)
