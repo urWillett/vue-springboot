@@ -4,7 +4,7 @@
 <!--   头部格式：高，行高，边框，下拉框，布局-->
     <div style="width: 200px;padding-left: 30px;font-weight: bold;color: dodgerblue">后台管理</div>
     <div style="flex: 1"></div>
-    <div style="width: 100px">
+    <div style="width: 150px">
       <el-dropdown split-button type="primary">
         <span >
           {{ people.username }} <i class="el-icon-arrow-down el-icon--right"></i>

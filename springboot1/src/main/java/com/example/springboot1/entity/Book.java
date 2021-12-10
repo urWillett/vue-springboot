@@ -21,6 +21,8 @@ public class Book {
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")  //日期格式化
     private Date createTime;
     private String cover;
+
+    private Integer peopleId;
 }
 
                    //使用了lombokJava简化工具，不用get/set

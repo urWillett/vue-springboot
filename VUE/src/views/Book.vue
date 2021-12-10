@@ -5,8 +5,14 @@
     <!--功能区域-->
     <div style="margin: 10px 0">
       <el-button type="primary" @click="add">新增</el-button>
-      <el-button type="primary">导入</el-button>
-      <el-button type="primary">导出</el-button>
+      <el-popconfirm
+          title="确定删除吗？"
+          @confirm="deleteBatch"
+      >
+        <template #reference>
+          <el-button type="danger" v-if="people.role === 1">批量删除</el-button>
+        </template>
+      </el-popconfirm>
     </div>
     <!--    搜索区域-->
     <div style="margin: 10px 0">
@@ -14,8 +20,11 @@
       <el-button type="primary" style="margin-left: 5px" @click="load">查询</el-button>
     </div>
     <!--    数据显示-->
-    <el-table :data="tableData" border style="width: 100%" stripe>
-
+    <el-table :data="tableData" border style="width: 100%" stripe  @selection-change="handleSelectionChange">
+      <el-table-column
+          type="selection"
+          width="55">
+      </el-table-column>
       <el-table-column prop="id" label="ID" sortable />
       <el-table-column prop="name" label="名称"  />
       <el-table-column prop="price" label="单价" />  <!--数据库中有_，查询出来显示驼峰-->
@@ -119,7 +128,7 @@ export default  {
           type: 'success'
         });
       },
-
+      people:{},
       form:{},
       handleClose:1,
       dialogVisible:false,
@@ -127,14 +136,34 @@ export default  {
       pageSize:10,
       total:0,
       search:ref('' ),
-      tableData:[
-      ],
+      tableData:[],
+
+      ids: []
     }
   },
   created() {
     this.load()
   }, //页面预加载时调用
   methods: {
+    //批量删除
+    deleteBatch() {
+      if (!this.ids.length) {
+        ElMessage.warning("请选择数据！")
+        return
+      }
+      request.post("/api/book/deleteBatch", this.ids).then(res => {
+        if (res.code === '0') {
+          ElMessage.success("批量删除成功")
+          this.load()
+        } else {
+          ElMessage.error(res.msg)
+        }
+      })
+    },
+
+    handleSelectionChange(val) {
+      this.ids = val.map(v => v.id)
+    },
     filesUploadSuccess(res){
       console.log(res)
       this.form.cover = res.data

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.springboot1.mapper.peopleMapper">
+<mapper namespace="com.example.springboot1.mapper.PeopleMapper">
 
-    <resultMap id="peopleMap" type="com.example.springboot1.entity.people">
+    <resultMap id="peopleMap" type="com.example.springboot1.entity.People">
         <result property="id" column="id"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
@@ -20,7 +20,7 @@
     </resultMap>
 
     <select id="findPage" resultMap="peopleMap">
-        SELECT 'people'.* ,book.id b_id, book.name b_name,book.price b_price from 'people'
-            left join book on people.id = book.people_id
+        SELECT people.* ,book.id b_id, book.name b_name,book.price b_price from people
+            left join book on people.id = book.people_id ORDER BY people_id
     </select>
 </mapper>

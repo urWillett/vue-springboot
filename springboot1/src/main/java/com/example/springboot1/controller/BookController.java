@@ -11,6 +11,7 @@ import com.example.springboot1.mapper.BookMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @CrossOrigin  //浏览器跨域注释
 @RestController   //1.定义  这是返回json 的controller
@@ -37,6 +38,12 @@ public class BookController {             //实现前后台数据交互
         return Result.success();
     }
 
+    //批量删除
+    @PostMapping("/deleteBatch")
+    public Result<?> deleteBatch(@RequestBody List<Integer> ids) {
+        bookMapper.deleteBatchIds(ids);
+        return Result.success();
+    }
 
     //更新接口
     @PutMapping
