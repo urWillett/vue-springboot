@@ -49,6 +49,7 @@ import {
   Setting, Avatar, UserFilled, Menu, Message,
 
 } from '@element-plus/icons'
+import request from "@/utils/request";
 
 export default {
   name: "Aside",
@@ -65,8 +66,21 @@ export default {
   },
   data(){
     return {
+      user: {},  //权限管理 根据v-if="people.role === 1" 来判断是否显示
       path: this.$route.path  //设置默认高亮的菜单
     }
+  },
+  //权限  查询信息
+  created() {
+    let peopleStr = sessionStorage.getItem("people") || "{}"
+    this.people = JSON.parse(peopleStr)
+
+    //请求服务端，确认当前登录用户的 合法信息
+    request.get("/people/"+ this.people.id).then(res =>{
+      if (res.code === '0'){
+        this.people = res.data
+      }
+    })
   },
   setup() {
     const handleOpen = (key, keyPath) => {

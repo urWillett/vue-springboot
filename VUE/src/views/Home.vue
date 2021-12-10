@@ -22,15 +22,22 @@
       <el-table-column prop="age" label="年龄" />
       <el-table-column prop="sex" label="性别" />
       <el-table-column prop="address" label="地址" />
-<!--      编辑和删除-->
-      <el-table-column fixed="right" label="操作" >
+      <el-table-column label="角色">
         <template #default="scope">
+          <span v-if="scope.row.role === 1">管理员</span>
+          <span v-if="scope.row.role === 2">普通用户</span>
+        </template>
+      </el-table-column>
+<!--      编辑和删除-->
+      <el-table-column fixed="right" label="操作" width="260">
+        <template #default="scope">
+          <el-button size="mini" type="success" plain @click="showBooks(scope.row.bookList)">查看图书列表</el-button>
        <el-popconfirm title="确认删除吗？" @confirm="handleDelete(scope.row.id)" >  <!--  气泡确认框  -->
             <template #reference>
           <el-button type="danger" size="mini" >删除</el-button>
             </template>
           </el-popconfirm>
-          <el-button  size="mini " @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button  size="mini " type="primary" plain @click="handleEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -48,7 +55,18 @@
       </el-pagination>
     </div>
 
+
 <!--    弹出框-->
+<!--    一对多查询弹出框-->
+    <el-dialog title="用户拥有的图书列表" v-model="bookVis" width="30%">
+      <el-table :data="bookList" stripe border>
+        <el-table-column prop="id" label="ID"></el-table-column>
+        <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column prop="price" label="价格"></el-table-column>
+      </el-table>
+    </el-dialog>
+
+
     <el-dialog
         v-model="dialogVisible"
         title="新增"
@@ -74,6 +92,12 @@
         <el-form-item label="地址">
           <el-input type="textarea" v-model="form.address" style="width: 80%"></el-input>
         </el-form-item>
+
+        <el-form-item label="角色">
+          <el-radio v-model="form.role" label="1"> 管理员</el-radio>
+          <el-radio v-model="form.role" label="2"> 普通用户</el-radio>
+        </el-form-item>
+
           </el-form>
       <template #footer>
       <span class="dialog-footer">
@@ -114,18 +138,24 @@ export default  {
       form:{},
       handleClose:1,
       dialogVisible:false,
+      bookVis:false,
       currentPage:1,
       pageSize:10,
       total:0,
       search:ref('' ),
-      tableData:[
-      ],
+      tableData:[],
+      bookList:[],
     }
   },
   created() {
     this.load()
   }, //页面预加载时调用
   methods: {
+    showBooks(books){
+      this.bookList = books
+      this.bookVis = true
+    },
+
     load(){
       request.get("/api/people",{
         params:{

@@ -78,6 +78,13 @@ public class PeopleController {             //实现前后台数据交互
     }
 
     //查询接口
+    /**
+     * 用户分页列表查询，包含书籍表的一对多查询
+     * @param pageNum
+     * @param pageSize
+     * @param search
+     * @return
+     */
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,/**当前页,数据页面当前翻到的页码*/
                               @RequestParam(defaultValue = "10") Integer pageSize   /**每一页多少条 10页每条 还是5页每条 */
@@ -88,10 +95,12 @@ public class PeopleController {             //实现前后台数据交互
             wrapper.like(People::getNickName ,search);
         }
 
-        Page<People> peoplePage = peopleMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        Page<People> peoplePage = peopleMapper.findPage(new Page<>(pageNum, pageSize));
 
          return Result.success(peoplePage);
     }
+
+
 
 
 }

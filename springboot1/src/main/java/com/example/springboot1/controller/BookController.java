@@ -37,6 +37,7 @@ public class BookController {             //实现前后台数据交互
         return Result.success();
     }
 
+
     //更新接口
     @PutMapping
     public Result <?>update(@RequestBody Book Book) {
